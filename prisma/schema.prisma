@@ -1,0 +1,112 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.String
+  access_token      String? @db.String
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.String
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String   @unique
+  userId       String   @db.ObjectId
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  lectures      Lecture[]
+  items         Item[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model VerificationToken {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Lecture {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String    @db.ObjectId
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  subject     String
+  dayOfWeek   Int
+  startTime   String
+  endTime     String
+  location    String?
+  instructor  String?
+  color       String    @default("#5046e5")
+  deadline    DateTime?
+  notes       String?
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+// Unified model for all non-recurring items
+model Item {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String    @db.ObjectId
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // "assignment" | "tutorial" | "quiz" | "exam" | "event"
+  type        String
+
+  title       String
+  course      String?
+  description String?
+
+  // For assignments/tutorials: submission deadline
+  // For events: just informational
+  dueDate     DateTime?
+
+  // For quiz/exam/event: actual date+time of the event
+  eventDate   DateTime?
+
+  location    String?
+
+  // "low" | "medium" | "high"
+  priority    String    @default("medium")
+
+  // "pending" | "done"
+  status      String    @default("pending")
+
+  color       String    @default("#5046e5")
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
