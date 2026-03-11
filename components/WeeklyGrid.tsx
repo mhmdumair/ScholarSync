@@ -16,8 +16,8 @@ const HOUR_END   = 22;
 const SLOT_MINS  = 30;
 const TOTAL_MINS = (HOUR_END - HOUR_START) * 60;
 const NUM_SLOTS  = (TOTAL_MINS) / SLOT_MINS;        // 30 slots
-const SLOT_H     = 36;                               // px per slot
-const GRID_H     = NUM_SLOTS * SLOT_H;               // 1080px total
+const SLOT_H     = 16;                               // px per slot
+const GRID_H     = NUM_SLOTS * SLOT_H;               // 480px total
 
 function toMinutes(t: string) {
   const [h, m] = t.split(":").map(Number);
