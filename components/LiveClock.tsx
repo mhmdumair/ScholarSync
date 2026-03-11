@@ -1,10 +1,16 @@
 // components/LiveClock.tsx
 "use client";
 
+import { useState, useEffect } from "react";
 import { useClock } from "@/hooks/useClock";
 
 export function LiveClock() {
   const now = useClock();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const timeStr = now.toLocaleTimeString("en-US", {
     hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true,
@@ -16,10 +22,19 @@ export function LiveClock() {
 
   return (
     <div className="surface p-5 flex items-center justify-between">
-      <div>
+      <div className="min-w-[200px]">
         <p className="text-xs text-[var(--tx-3)] font-semibold uppercase tracking-wider mb-1">Current Time</p>
-        <div className="font-mono text-3xl font-bold text-[var(--tx-1)] tracking-tight">{timeStr}</div>
-        <div className="text-sm text-[var(--tx-2)] mt-0.5">{dateStr}</div>
+        {mounted ? (
+          <>
+            <div className="font-mono text-3xl font-bold text-[var(--tx-1)] tracking-tight">{timeStr}</div>
+            <div className="text-sm text-[var(--tx-2)] mt-0.5">{dateStr}</div>
+          </>
+        ) : (
+          <>
+            <div className="h-9 w-40 bg-gray-100 rounded animate-pulse" />
+            <div className="h-5 w-32 bg-gray-100 rounded animate-pulse mt-1" />
+          </>
+        )}
       </div>
       <div className="w-12 h-12 rounded-full bg-[var(--accent-light)] flex items-center justify-center">
         <svg className="w-6 h-6 text-[var(--accent)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>

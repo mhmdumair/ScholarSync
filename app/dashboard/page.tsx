@@ -12,7 +12,7 @@ export default async function DashboardPage() {
 
   const [lectures, items] = await Promise.all([getLectures(), getItems()]);
 
-  const serializedLectures = lectures.map(l => ({
+  const serializedLectures = lectures.map((l: any) => ({
     id: l.id,
     title: l.title,
     subject: l.subject,
@@ -26,7 +26,7 @@ export default async function DashboardPage() {
     notes: l.notes,
   }));
 
-  const serializedItems = items.map(i => ({
+  const serializedItems = items.map((i: any) => ({
     id: i.id,
     type: i.type,
     title: i.title,

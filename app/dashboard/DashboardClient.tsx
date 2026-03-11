@@ -30,7 +30,7 @@ interface Props {
 
 type Tab = "today" | "timetable" | "tasks" | "quizexams" | "events" | "gpa" | "profile";
 
-const NAV: { id: Tab; label: string; icon: JSX.Element }[] = [
+const NAV: { id: Tab; label: string; icon: React.ReactNode }[] = [
   {
     id: "today", label: "Today",
     icon: <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>,
@@ -159,7 +159,7 @@ export function DashboardClient({ user, initialLectures, initialItems }: Props) 
 
         {/* Nav — scrollable with thin scrollbar */}
         <nav className="flex-1 px-3 pb-3 flex flex-col gap-0.5 overflow-y-auto">
-          <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-[#3a3a4a] px-2 py-1.5">Schedule</p>
+          <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-[#94a3b8] px-2 py-1.5 mt-2">Schedule</p>
 
           {NAV.filter(n => ["today","timetable","tasks","quizexams","events"].includes(n.id)).map(n => (
             <button key={n.id} onClick={() => { setTab(n.id); setSidebarOpen(false); }}
@@ -175,7 +175,7 @@ export function DashboardClient({ user, initialLectures, initialItems }: Props) 
           ))}
 
           <div className="h-px bg-[var(--side-border)] my-2" />
-          <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-[#3a3a4a] px-2 pb-1.5">Tools</p>
+          <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-[#94a3b8] px-2 pb-1.5">Tools</p>
 
           {NAV.filter(n => ["gpa","profile"].includes(n.id)).map(n => (
             <button key={n.id} onClick={() => { setTab(n.id); setSidebarOpen(false); }}
@@ -213,8 +213,8 @@ export function DashboardClient({ user, initialLectures, initialItems }: Props) 
               : <div className="w-[30px] h-[30px] rounded-full bg-white/15 flex items-center justify-center text-white font-bold text-sm shrink-0">{user.name?.charAt(0) ?? "?"}</div>
             }
             <div className="flex-1 min-w-0">
-              <p className="text-white text-xs font-semibold truncate leading-tight">{user.name ?? "Student"}</p>
-              <p className="text-[var(--side-text)] text-[10px] truncate">{user.email}</p>
+              <p className="text-white text-[13px] font-semibold truncate leading-tight">{user.name ?? "Student"}</p>
+              <p className="text-[#cbd5e1] text-[11px] truncate">{user.email}</p>
             </div>
             <button
               onClick={e => { e.stopPropagation(); signOut({ callbackUrl: "/auth/signin" }); }}
@@ -239,7 +239,7 @@ export function DashboardClient({ user, initialLectures, initialItems }: Props) 
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
           </button>
           <div className="flex-1">
-            <h1 className="font-bold text-[var(--tx-1)] text-base">
+            <h1 className="outfit font-bold text-[var(--tx-1)] text-2xl tracking-tight">
               {NAV.find(n => n.id === tab)?.label}
             </h1>
           </div>
@@ -414,8 +414,7 @@ export function DashboardClient({ user, initialLectures, initialItems }: Props) 
 
           {/* ── PROFILE ── */}
           {tab === "profile" && (
-            <div className="fade-in">
-              <h2 className="font-bold text-[var(--tx-1)] text-base mb-5">My Profile</h2>
+            <div className="fade-in animate-in slide-in-from-bottom-4 duration-500">
               <ProfileSettings user={user} />
             </div>
           )}

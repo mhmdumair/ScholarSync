@@ -19,7 +19,7 @@ export async function GET() {
   });
 
   return NextResponse.json(
-    lectures.map((l) => ({
+    lectures.map((l: any) => ({
       ...l,
       deadline: l.deadline?.toISOString() ?? null,
       createdAt: l.createdAt.toISOString(),
