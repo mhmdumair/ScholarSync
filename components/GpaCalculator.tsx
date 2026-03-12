@@ -2,7 +2,8 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { StudentProfile, useProfile } from "@/components/StudentProfile";
+import { useProfile } from "@/components/StudentProfile";
+import Link from "next/link";
 
 /* ─── Types ─────────────────────────────────────────────────── */
 type GradeKey =
@@ -200,8 +201,20 @@ export function GpaCalculator() {
   return (
     <div className="space-y-5 fade-in">
 
-      {/* ── Profile ── */}
-      <StudentProfile profile={profile} onSave={saveProfile} defaultExpanded={!profile} />
+      {/* ── Profile Redirect Banner ── */}
+      {!profile && (
+        <div className="surface p-5 border-l-4 border-amber-500 bg-amber-50/50 flex flex-col sm:flex-row items-start sm:items-center gap-4 justify-between">
+          <div>
+            <h3 className="font-bold text-amber-900 text-sm">Academic Profile Required</h3>
+            <p className="text-xs text-amber-800 mt-1">
+              Please complete your academic profile to calculate your official GPA accurately.
+            </p>
+          </div>
+          <Link href="/dashboard?tab=profile" className="btn bg-white text-amber-700 border border-amber-300 hover:bg-amber-100 shrink-0 text-xs px-4 py-2 mt-2 sm:mt-0">
+            Set Up Profile →
+          </Link>
+        </div>
+      )}
 
       {/* ── GPA Summary ── */}
       {realGPA !== null && (

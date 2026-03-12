@@ -6,6 +6,7 @@ import Image from "next/image";
 import { signOut } from "next-auth/react";
 import { updateProfile } from "@/app/actions/profile";
 import toast from "react-hot-toast";
+import { StudentProfile, useProfile } from "@/components/StudentProfile";
 
 interface Props {
   user: {
@@ -20,6 +21,7 @@ export function ProfileSettings({ user }: Props) {
   const [name, setName] = useState(user.name ?? "");
   const [saving, setSaving] = useState(false);
   const [dirty, setDirty] = useState(false);
+  const { profile, saveProfile } = useProfile();
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -82,6 +84,14 @@ export function ProfileSettings({ user }: Props) {
           </div>
         </div>
       </div>
+
+      {/* Academic Profile */}
+      <h3 className="outfit font-bold text-[var(--tx-1)] text-lg px-2 mt-8 -mb-2">Academic Profile</h3>
+      <div className="-mx-2 sm:mx-0">
+        <StudentProfile profile={profile} onSave={saveProfile} defaultExpanded={!profile} />
+      </div>
+
+      <div className="h-4" />
 
       {/* Edit Form Card */}
       <div className="surface p-8 delay-100">
