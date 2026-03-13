@@ -207,7 +207,8 @@ textarea.field { resize: vertical; min-height: 72px; }
 }
 .modal-panel {
   background: var(--surface);
-  width: 100%; max-width: 440px; height: 100vh;
+  width: 100%; max-width: 440px; 
+  height: 100vh; height: 100dvh;
   display: flex; flex-direction: column;
   box-shadow: -8px 0 32px rgba(0,0,0,0.12);
   border-left: 1px solid var(--border);

@@ -114,34 +114,35 @@ export function WeeklyGrid({
   const hourSlots = Array.from({ length: TOTAL_HOURS }, (_, i) => HOUR_START + i);
 
   return (
-    <div className="rounded-xl border border-[var(--border)] overflow-hidden bg-white shadow-sm">
-
-      {/* ── Day header ── */}
-      <div
-        className="grid border-b border-[var(--border)] sticky top-0 z-20 bg-white"
-        style={{ gridTemplateColumns: `64px repeat(${DISPLAY_DAYS.length}, 1fr)` }}
-      >
-        <div className="border-r border-[var(--border)] bg-gray-50" />
-        {DISPLAY_DAYS.map((dayIdx) => (
+    <div className="rounded-xl border border-[var(--border)] overflow-hidden bg-white shadow-sm flex flex-col">
+      <div className="overflow-x-auto">
+        <div className="min-w-[500px]">
+          {/* ── Day header ── */}
           <div
-            key={dayIdx}
-            className="py-3 text-center border-l border-[var(--border)]"
+            className="grid border-b border-[var(--border)] sticky top-0 z-20 bg-white"
+            style={{ gridTemplateColumns: `64px repeat(${DISPLAY_DAYS.length}, 1fr)` }}
           >
-            <span
-              className={`text-[11px] font-bold uppercase tracking-widest ${
-                dayIdx === todayDay ? "text-blue-600" : "text-[var(--tx-3)]"
-              }`}
-            >
-              {DAYS[dayIdx].slice(0, 3)}
-            </span>
-            {dayIdx === todayDay && (
-              <div className="flex justify-center mt-1">
-                <span className="w-1.5 h-1.5 bg-blue-600 rounded-full" />
+            <div className="border-r border-[var(--border)] bg-gray-50" />
+            {DISPLAY_DAYS.map((dayIdx) => (
+              <div
+                key={dayIdx}
+                className="py-3 text-center border-l border-[var(--border)]"
+              >
+                <span
+                  className={`text-[11px] font-bold uppercase tracking-widest ${
+                    dayIdx === todayDay ? "text-blue-600" : "text-[var(--tx-3)]"
+                  }`}
+                >
+                  {DAYS[dayIdx].slice(0, 3)}
+                </span>
+                {dayIdx === todayDay && (
+                  <div className="flex justify-center mt-1">
+                    <span className="w-1.5 h-1.5 bg-blue-600 rounded-full" />
+                  </div>
+                )}
               </div>
-            )}
+            ))}
           </div>
-        ))}
-      </div>
 
       {/* ── Grid body ── */}
       <div className="overflow-y-auto" style={{ maxHeight: "580px" }}>
@@ -300,6 +301,8 @@ export function WeeklyGrid({
             );
           })}
         </div>
+      </div>
+      </div>
       </div>
 
       {/* ── Footer ── */}
