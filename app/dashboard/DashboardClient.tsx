@@ -310,21 +310,25 @@ export function DashboardClient({ user, initialLectures, initialItems }: Props) 
               </div>
               <WeeklyGrid
                 lectures={lectures}
-                onEdit={l => setLectureModal({ open:true, edit:l })}
+                onEdit={(ids, l) => setLectureModal({ open:true, edit: { ...l, ids } as any })}
                 onSlotClick={(day, time) => setLectureModal({ open:true, edit:null, day, time })}
               />
-              {/* All lectures list */}
+              {/* Unique Courses List */}
               {lectures.length > 0 && (
                 <div>
-                  <div className="section-header mt-2"><h3>All Lectures</h3><div className="line"/></div>
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    {DAYS.map((day, i) => {
-                      const dl = lectures.filter(l=>l.dayOfWeek===i).sort((a,b)=>a.startTime.localeCompare(b.startTime));
-                      if (!dl.length) return null;
+                  <div className="section-header mt-8"><h3>My Courses</h3><div className="line"/></div>
+                  <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
+                    {Array.from(new Map(lectures.map(l => [l.title.toLowerCase().trim(), l] as [string, typeof l])).values()).map(course => {
+                      const courseLectures = lectures.filter(l => l.title.toLowerCase().trim() === course.title.toLowerCase().trim());
                       return (
-                        <div key={i}>
-                          <p className={`text-xs font-bold uppercase tracking-wider mb-2 ${i===todayDay?"text-[var(--accent)]":"text-[var(--tx-3)]"}`}>{day} {i===todayDay && "• Today"}</p>
-                          <div className="space-y-2">{dl.map(l=><LectureCard key={l.id} lecture={l} onEdit={e=>setLectureModal({open:true,edit:e})} compact/>)}</div>
+                        <div key={course.id} className="surface p-4 border-l-[3px] hover:shadow-md transition-shadow" style={{ borderLeftColor: course.color }}>
+                          <h4 className="font-bold text-[var(--tx-1)] text-sm">{course.title}</h4>
+                          <p className="text-xs text-[var(--tx-3)] mt-0.5">{course.subject}</p>
+                          <div className="mt-3 flex items-center gap-2">
+                             <span className="text-[11px] font-medium bg-[var(--surface-2)] px-2 py-0.5 rounded-md border border-[var(--border)] text-[var(--tx-2)]">
+                               {courseLectures.length} {courseLectures.length === 1 ? "Class" : "Classes"}/week
+                             </span>
+                          </div>
                         </div>
                       );
                     })}

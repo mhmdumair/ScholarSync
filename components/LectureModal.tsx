@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { addLecture, updateLecture, LectureFormData } from "@/app/actions/lectures";
+import { addLecture, updateLecture, deleteLecture, LectureFormData } from "@/app/actions/lectures";
 import { DAYS } from "@/lib/time";
 import toast from "react-hot-toast";
 import type { LectureCardData } from "./LectureCard";
@@ -72,6 +72,22 @@ export function LectureModal({ isOpen, onClose, editLecture, defaultDay, default
 
   const timeInvalid =
     !!form.startTime && !!form.endTime && form.startTime >= form.endTime;
+
+  const handleDelete = async () => {
+    if (!editLecture) return;
+    if (!confirm(`Free the slot for "${editLecture.title}"?`)) return;
+    setLoading(true);
+    try {
+      const idsToDelete = (editLecture as any).ids || [editLecture.id];
+      await Promise.all(idsToDelete.map((id: string) => deleteLecture(id)));
+      toast.success("Slot freed!");
+      onClose();
+    } catch (err: any) {
+      toast.error(err.message || "Failed to free slot");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -253,8 +269,9 @@ export function LectureModal({ isOpen, onClose, editLecture, defaultDay, default
               <div>
                 <button
                   type="button"
-                  onClick={onClose}
-                  className="w-full py-2 text-sm font-medium rounded-lg border border-red-300 text-red-600 bg-red-50 hover:bg-red-100 transition-colors"
+                  onClick={handleDelete}
+                  disabled={loading}
+                  className="w-full py-2 text-sm font-medium rounded-lg border border-red-300 text-red-600 bg-red-50 hover:bg-red-100 transition-colors disabled:opacity-50"
                 >
                   Free this slot
                 </button>
