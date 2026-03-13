@@ -16,6 +16,12 @@ export const authOptions: NextAuthOptions = {
     strategy: "database",
   },
   callbacks: {
+    async signIn({ user }) {
+      if (user.email?.endsWith("@sci.pdn.ac.lk")) {
+        return true;
+      }
+      return false; // Return false to display a default error message
+    },
     async session({ session, user }) {
       if (session.user) {
         session.user.id = user.id;
