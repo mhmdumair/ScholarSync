@@ -8,7 +8,7 @@ import { Toaster } from "react-hot-toast";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: "ScholarSync — Student Schedule Manager",
+  title: "ScholarSync",
   description: "Your complete academic schedule manager for lectures, assignments, quizzes, exams and events.",
 };
 
